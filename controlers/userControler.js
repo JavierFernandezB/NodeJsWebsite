@@ -1,4 +1,4 @@
-import { users,emailToken,recpass } from "../models/index.js";
+import { users,emailToken,recpass,githubuser } from "../models/index.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import {mail} from "../nodemail/mail.js";
@@ -150,7 +150,7 @@ const logoffuser = (req,res)=>{
 }
 
 const profileuser = (req,res)=>{
-    
+    res.render("profile");
 } 
 
 const verifyEmail=async(req,res)=>{
@@ -260,11 +260,33 @@ const resetuser=async (req,res)=>{
     res.render("./0auth/reset",{errors});
 }
 
+
+
 //github
 const githublog=(req,res)=>{
     var callback = "http://localhost:4000/user/github/callback";
     const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=login`
     res.redirect(url);
+}
+const githublinkuserget=async(req,res)=>{
+    if(req.session.github){
+        var checkgit=await githubuser.findOne({where:{id:req.session.user.id}});
+        if(!checkgit){
+            var loguser= await users.findOne({where:{id:req.session.user.id}})
+            if(loguser){
+                var git=await githubuser.create({name:req.session.github.login,username:req.session.github.username,userid:loguser.id,avatar_url:req.session.github.avatar_url})
+                git.save();
+                return res.render("profile",{bien:"TOdo bien"})
+            }else{
+                return res.render("profile",{bien:"Mal buscar user"})
+            }
+        }else{
+            res.render("profile",{bien:"usuario ya esta linkeado con github"})
+        }
+        
+    }else{
+        return res.render("profile",{bien:""})
+    }
 }
 
 const githubregister=(req,res)=>{
@@ -272,15 +294,24 @@ const githubregister=(req,res)=>{
     const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=register`
     res.redirect(url);
 }
-
-
+const linkgithub=(req,res)=>{
+    var callback = "http://localhost:4000/user/github/callback";
+    const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=link`
+    res.redirect(url);
+}
 
 const githubcallback=async (req, res) => {
   var state=req.query.state;
   var code= req.query.code;
   var token = await getAccessToken({code});
   if(token){
-    //var x = await fetchGitHubUser(token)
+      if(state=="link"){
+         
+          req.session.github= await fetchGitHubUser(token);
+          console.log(req.session.github)
+          return res.redirect("/user/link");
+      }
+    //
     res.json({state});
   }else{
       res.json({bien:"no"})
@@ -313,9 +344,13 @@ async function fetchGitHubUser(token) {
       }
     });
     return await request.json();
-  }
+}
 
 
 export {
-    loginuser,registeruser,loginform,registerform,logoffuser,profileuser,verifyEmail,forgotpass,resetpass,forgotuser,resetuser,githublog,githubcallback,githubregister
+    loginuser,registeruser,loginform,registerform,
+    logoffuser,profileuser,verifyEmail,forgotpass,
+    resetpass,forgotuser,resetuser,githublog,
+    githubcallback,githubregister,linkgithub,
+    githublinkuserget
 }
