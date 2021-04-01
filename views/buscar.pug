@@ -1,0 +1,6 @@
+extends ./layout/index
+
+block content
+    form(action="/api/v1/", method="post")
+        input(type="text", name="nombre")
+        input(type="submit")

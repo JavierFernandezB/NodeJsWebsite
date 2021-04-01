@@ -1,0 +1,32 @@
+extends ./layout/index
+
+block content
+    link(rel="stylesheet", href="/css/signin.css")
+    form(method='POST', action='/user/register').form-signin
+        img.mb-4(src='https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72')
+        h1.h3.mb-3.font-weight-normal Please register
+        label.sr-only(for='inputUser') Email address
+        input#inputUser.form-control.mb-2(type='text' placeholder='Username' required='' autofocus='' name='username' value= (info.username ? info.username : null))
+        if errors.user
+                div(class="alert alert-danger") #{errors.user}
+        input#inputEmail.form-control.mb-2(type='email' placeholder='Email' required='' autofocus='' name='email' value= (info.username ? info.username : null))
+        if errors.email
+                div(class="alert alert-danger") #{errors.email}
+        label.sr-only(for='inputPassword') Password
+        input#inputPassword.form-control.mb-4(type='password' placeholder='Password' required='' name='password')
+        if errors.password
+                div(class="alert alert-danger") #{errors.password} 
+        //- .checkbox.mb-3
+        //-     //
+        //-         <label>
+        //-         <input type="checkbox" value="remember-me"> Remember me
+        //-         </label>
+        button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
+        br
+        p.mb-3.text-muted © 2017-2021
+
+    a(href="/user/login")
+        button.btn.btn-primary.btn-sm Login
+    a(href="/user/register/github")
+        button.btn.btn-primary.btn-sm Register with github
+

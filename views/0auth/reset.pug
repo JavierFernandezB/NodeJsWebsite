@@ -1,0 +1,29 @@
+extends ../layout/index
+
+block content
+    link(rel="stylesheet", href="/css/signin.css")
+    if !errors.invalid
+        form(method="post" action=`/user/reset/${errors.tokenform}`).form-signin
+            img.mb-4(src='https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72')
+            h1.h3.mb-3.font-weight-normal Reset password
+            label.sr-only(for='inputEmail') Password
+            input#inputEmail.form-control.mb-2(type='password' placeholder='Password' required='' autofocus='' name='password')
+            label.sr-only(for='inputPassword') repeat Password
+            input#inputPassword.form-control(type='password' placeholder='Password 2' required='' name='password2')
+            if errors.match
+                div(class="alert alert-danger") #{errors.match}
+            if errors.user
+                div(class="alert alert-danger") #{errors.user}
+            if errors.token
+                div(class="alert alert-danger") #{errors.token}
+            //- .checkbox.mb-3
+                //
+                    <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+            button.btn.btn-lg.btn-primary.btn-block(type='submit') Log in
+    else if errors.success
+        h1 #{errors.success}
+    else
+        if errors.invalid
+                div(class="alert alert-danger container") #{errors.invalid}

@@ -1,0 +1,15 @@
+extends ../layout/index
+
+block content
+    link(rel="stylesheet", href="/css/signin.css")
+    if !errors.success
+        form(method="post" action="/user/forgot").form-signin
+            img.mb-4(src='https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72')
+            h1.h3.mb-3.font-weight-normal Recover password
+            label.sr-only(for='inputEmail') Email address
+            input#inputEmail.form-control.mb-2(type='email' placeholder='Email' required='' autofocus='' name='email')    
+            button.btn.btn-lg.btn-primary.btn-block(type='submit') Recover
+            if errors.email
+                h1 #{errors.email}
+    else 
+        h1 Enviado

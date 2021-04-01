@@ -1,0 +1,49 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-dark
+    a.navbar-brand(href='/') Home
+    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav
+            li.nav-item.active
+                a.nav-link(href='#') Home 
+                    span.sr-only (current)
+            li.nav-item
+                a.nav-link(href='#') Link
+            li.nav-item.dropdown
+                a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    | &nbsp; api &nbsp;
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/api/v1/') api
+                    a.dropdown-item(href='/buscar') buscar usuario
+                    .dropdown-divider
+                    a.dropdown-item(href='#') Something else here
+            li.nav-item
+                a.nav-link.disabled(href='/user/aboutme' aria-disabled='true') About me
+        ul(class="navbar-nav ml-auto")
+            if !user
+                li
+                    a(href="/user/login")
+                        button(type="button" class="btn btn-light")
+                                svg.icon.icon-tabler.icon-tabler-user(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' stroke='#00abfb' fill='none' stroke-linecap='round' stroke-linejoin='round')
+                                    path(stroke='none' d='M0 0h24v24H0z' fill='none')
+                                    circle(cx='12' cy='7' r='4')
+                                    path(d='M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2')
+                                span#buttonText Login/Register
+            else
+                li
+                    a(href="/user/profile")
+                        button(type="button" class="btn btn-light")
+                                svg.icon.icon-tabler.icon-tabler-user(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' stroke='#00abfb' fill='none' stroke-linecap='round' stroke-linejoin='round')
+                                    path(stroke='none' d='M0 0h24v24H0z' fill='none')
+                                    circle(cx='12' cy='7' r='4')
+                                    path(d='M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2')
+                                span#buttonText #{user.username}
+                    span(margin-right="10px" margin-left="10px")    
+                                
+                    a(href="/user/logoff")
+                        button.btn.btn-outline-warning Logoff
+
+
+
+            
+
