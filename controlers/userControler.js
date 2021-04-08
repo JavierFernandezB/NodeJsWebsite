@@ -268,13 +268,15 @@ const githublog=(req,res)=>{
     const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=login`
     res.redirect(url);
 }
+
 const githublinkuserget=async(req,res)=>{
     if(req.session.github){
-        var checkgit=await githubuser.findOne({where:{id:req.session.user.id}});
+        var checkgit = await githubuser.findOne({where:{gitid:req.session.github.id}});
         if(!checkgit){
             var loguser= await users.findOne({where:{id:req.session.user.id}})
             if(loguser){
-                var git=await githubuser.create({name:req.session.github.login,username:req.session.github.username,userid:loguser.id,avatar_url:req.session.github.avatar_url})
+                var git=await githubuser.create({name:req.session.github.login,username:req.session.github.name,
+                    userid:loguser.id,avatar_url:req.session.github.avatar_url,gitid:req.session.github.id})
                 git.save();
                 return res.render("profile",{bien:"TOdo bien"})
             }else{
@@ -289,11 +291,8 @@ const githublinkuserget=async(req,res)=>{
     }
 }
 
-const githubregister=(req,res)=>{
-    var callback = "http://localhost:4000/user/github/callback";
-    const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=register`
-    res.redirect(url);
-}
+
+
 const linkgithub=(req,res)=>{
     var callback = "http://localhost:4000/user/github/callback";
     const url=`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUBCLIENT}&redirect_uri=${callback}&state=link`
@@ -306,13 +305,16 @@ const githubcallback=async (req, res) => {
   var token = await getAccessToken({code});
   if(token){
       if(state=="link"){
-         
           req.session.github= await fetchGitHubUser(token);
-          console.log(req.session.github)
           return res.redirect("/user/link");
+      }else if(state=="login"){
+          var searchgithub=await fetchGitHubUser(token);
+          var usergit=await githubuser.findOne({where:{login:searchgithub.login}});
+          var user=await users.findOne({where:{}})
+        req.session.github= searchgithub;
+        return res.redirect("/user/link");
       }
-    //
-    res.json({state});
+    res.json({x});
   }else{
       res.json({bien:"no"})
   }
@@ -351,6 +353,6 @@ export {
     loginuser,registeruser,loginform,registerform,
     logoffuser,profileuser,verifyEmail,forgotpass,
     resetpass,forgotuser,resetuser,githublog,
-    githubcallback,githubregister,linkgithub,
+    githubcallback,linkgithub,
     githublinkuserget
 }

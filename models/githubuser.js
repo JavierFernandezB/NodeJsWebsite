@@ -18,5 +18,8 @@ export const githubuser = db.define('githubuser',{
     },
     avatar_url:{
         type:sequelize.STRING
+    },
+    gitid:{
+        type:sequelize.INTEGER
     }
 })

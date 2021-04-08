@@ -3,8 +3,7 @@ import {loginuser,registeruser,registerform,
     loginform,logoffuser,verifyEmail,
     forgotpass,resetpass,forgotuser,
     resetuser,githublog,githubcallback,
-    githubregister,profileuser,linkgithub,
-    githublinkuserget
+    profileuser,linkgithub,githublinkuserget
 
 } from "../controlers/userControler.js";
 
@@ -41,7 +40,7 @@ routeruser.get("/github/callback",githubcallback);
 
 //redirect buttons
 routeruser.get("/login/github",githublog);
-routeruser.get("/register/github",githubregister);
+
 routeruser.get("/login/link",linkgithub);
 routeruser.get("/link",loginrequired,githublinkuserget);
 // routeruser.get("/register/github",githubreg);

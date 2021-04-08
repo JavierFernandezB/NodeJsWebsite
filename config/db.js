@@ -5,7 +5,8 @@ const db = new sequelize('website', 'root', '', {
     port: '3306',
     dialect: 'mysql',
     define: {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     },
     pool: {
         max: 5,

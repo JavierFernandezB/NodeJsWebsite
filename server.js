@@ -6,6 +6,8 @@ import routeradmin from "./routes/admin.js";
 import db from './config/db.js';
 import session from "express-session";
 import dotenv from "dotenv";
+
+
 dotenv.config();
 // crear la app
 const app = express();
@@ -14,7 +16,7 @@ const port = process.env.PORT || 4000;
 //concectar db
 db.authenticate()
     .then(() => console.log("conectado a la base de datos"))
-    .catch(error => console.log(1));
+    .catch(error => console.log(error));
 
 // agregar el pug
 app.set("view engine", "pug");
@@ -34,10 +36,7 @@ app.use(session({
 app.use((req, res, next)=> {
     if(req.session.user){
         res.locals.user=req.session.user;
-    }else{
-        res.locals.user=null;
     }
-    
     next();
 });
 

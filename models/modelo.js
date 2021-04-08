@@ -23,9 +23,6 @@ export const users = db.define('users', {
     email:{
         type:sequelize.STRING
     },
-    coins:{
-        type:sequelize.INTEGER
-    },
     verified:{
         type:sequelize.BOOLEAN
     }
